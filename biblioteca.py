@@ -138,7 +138,6 @@ def mostrar_jugadores(jugadores: list):
     """""
     recive como parametro una lista de jugadores
     recorre la lista  imprime nombre y pocicion de los jugadores
-    
     """""
     if jugadores:
         for jugador in jugadores:
