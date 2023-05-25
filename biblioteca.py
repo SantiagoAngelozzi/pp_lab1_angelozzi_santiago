@@ -1,6 +1,6 @@
 import json
 import os
-#0) funciones reutilizables o funciones base.
+#0) funciones reutilizables o complementarias.
 def clear_console() -> None:
     """
     It waits for the user to hit enter 
@@ -33,7 +33,7 @@ def imprimir_dato(dato : str):
     '''
     print(dato)
 
-def validar_entero(num):
+def validar_entero(num) -> bool:
     '''
     recive un numero
     verifica que se un numero
@@ -134,7 +134,7 @@ def dream_team_app(jugadores: list):
 # 1) Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
 # Nombre Jugador - Posición. Ejemplo:
 # Michael Jordan - Escolta 
-def mostrar_jugadores(jugadores):
+def mostrar_jugadores(jugadores ):
     if jugadores:
         for jugador in jugadores:
             imprimir_dato(f"{jugador['nombre']} - {jugador['posicion']}")
