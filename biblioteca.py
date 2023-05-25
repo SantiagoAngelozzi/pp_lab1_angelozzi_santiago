@@ -134,7 +134,11 @@ def dream_team_app(jugadores: list):
 # 1) Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
 # Nombre Jugador - Posición. Ejemplo:
 # Michael Jordan - Escolta 
-def mostrar_jugadores(jugadores ):
+def mostrar_jugadores(jugadores: list):
+    """""
+    recive como parametro una lista de jugadores
+    recorre la lista  imprime nombre y pocicion de los jugadores
+    """""
     if jugadores:
         for jugador in jugadores:
             imprimir_dato(f"{jugador['nombre']} - {jugador['posicion']}")
