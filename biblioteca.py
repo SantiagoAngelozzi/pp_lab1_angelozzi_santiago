@@ -142,4 +142,3 @@ def mostrar_jugadores(jugadores: list):
     if jugadores:
         for jugador in jugadores:
             imprimir_dato(f"{jugador['nombre']} - {jugador['posicion']}")
-
