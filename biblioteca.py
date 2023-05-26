@@ -21,7 +21,7 @@ def leer_archivo_json(ruta: str) -> list:
     :return: una lista de jugadores leída de un archivo JSON ubicado en la ruta especificada.
 
     """
-    with open(ruta, "r") as archivo:
+    with open(ruta, "r", encoding = "utf-8") as archivo:
         contenido = json.load(archivo)
         lista_jugadores = contenido["jugadores"]
     return lista_jugadores
@@ -91,11 +91,11 @@ def dream_team_app(jugadores: list):
             case 1:
                 mostrar_jugadores(jugadores)
             case 2:
-                seleccionar_jugador(jugadores)
+                seleccionar_jugador_indice(jugadores)
             case 3:
                 guardar_estadisticas_csv(jugadores)
             case 4:
-                pass
+                mostrar_logros_jugador(jugadores)
             case 5:
                 pass
             case 6:
@@ -174,7 +174,7 @@ def mostrar_estadisticas_jugador(jugador) -> str:
     return dato
     
 
-def seleccionar_jugador(jugadores: list):
+def seleccionar_jugador_indice(jugadores: list):
     """""
     recive como parametro una lista de jugadores 
     recorre la lista imprime los jugadores ordenados por indice y da a elejir uno
@@ -201,9 +201,43 @@ def seleccionar_jugador(jugadores: list):
 # porcentaje de tiros libres y porcentaje de tiros triples.
 
 def guardar_estadisticas_csv(jugadores):
-    contenido = seleccionar_jugador(jugadores)
+    contenido = seleccionar_jugador_indice(jugadores)
     archivo = "estadisticas_jugador.csv"
     guardar_archivo_csv(archivo, contenido)
+
+# 4) Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, como campeonatos de la NBA,
+# participaciones en el All-Star y pertenencia al Salón de la Fama del Baloncesto, etc.
+
+def seleccionar_jugador_por_nombre()->str:
+    nombre = input("Escribir nombre de jugador: ")
+    patron = ""
+    if re.match(r"^[A-Za-z ]{3}",nombre):
+        patron = nombre
+    else:
+        imprimir_dato("Nombre inválido. Inténtelo nuevamente")
+    return patron
+
+def mostrar_logros_jugador(jugadores):
+    patron = seleccionar_jugador_por_nombre()
+    jugador_encontrado = None
+    for jugador in jugadores:
+        if re.search(patron, jugador['nombre']):
+            jugador_encontrado = jugador
+            break
+    if jugador_encontrado is not None:
+        imprimir_dato(f"Logros de: {jugador_encontrado['nombre']}")
+        for logro in jugador_encontrado['logros']:
+            print("- " + logro)
+    else:
+        print("Jugador no encontrado.")
+
+
+
+
+
+
+
+
 
 
 
