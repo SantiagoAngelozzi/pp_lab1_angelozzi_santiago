@@ -126,13 +126,13 @@ def dream_team_app(jugadores: list):
             case 6:
                 mostrar_jugador_salon_fama(jugadores)
             case 7:
-                lista_ordenada = quick_sort_estadistica(jugadores, "rebotes_totales", False)
+                lista_ordenada = quick_sort_estadisticas(jugadores, "rebotes_totales", False)
                 imprimir_dato(f"el jugador con mayor cantidad de rebotes totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['rebotes_totales']}")
             case 8:
-                lista_ordenada = quick_sort_estadistica(jugadores, "porcentaje_tiros_de_campo", False)
+                lista_ordenada = quick_sort_estadisticas(jugadores, "porcentaje_tiros_de_campo", False)
                 imprimir_dato(f"el jugador con mayor porcentaje de tiros de campo es: {lista_ordenada[0]['nombre']} y el porcemtaje es: {lista_ordenada[0]['estadisticas']['porcentaje_tiros_de_campo']}")
             case 9:
-                lista_ordenada = quick_sort_estadistica(jugadores, "promedio_asistencias_por_partido", False)
+                lista_ordenada = quick_sort_estadisticas(jugadores, "promedio_asistencias_por_partido", False)
                 imprimir_dato(f"el jugador con mayor promedio de asistencia por partido es: {lista_ordenada[0]['nombre']} y el promedio es: {lista_ordenada[0]['estadisticas']['promedio_asistencias_por_partido']}")
             case 10:
                 mostrar_promedios_mayor_al_valor(jugadores, "promedio_puntos_por_partido")               
@@ -141,9 +141,11 @@ def dream_team_app(jugadores: list):
             case 12:
                 mostrar_promedios_mayor_al_valor(jugadores, "promedio_asistencias_por_partido")
             case 13:
-                pass
+                lista_ordenada = quick_sort_estadisticas(jugadores, "robos_totales", False)
+                imprimir_dato(f"el jugador con mayor cantidad de robos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['robos_totales']}")
             case 14:
-                pass
+                lista_ordenada = quick_sort_estadisticas(jugadores, "bloqueos_totales", False)
+                imprimir_dato(f"el jugador con mayor cantidad de bloqueos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['bloqueos_totales']}")
             case 15:
                 pass
             case 16:
@@ -330,8 +332,10 @@ def mostrar_jugador_salon_fama(jugadores: list):
 # 7) Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.
 # 8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.
 # 9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
+# 13) Calcular y mostrar el jugador con la mayor cantidad de robos totales.
+# 14) Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.
 
-def quick_sort_estadistica(jugadores:list,dato:str,flag:bool):
+def quick_sort_estadisticas(jugadores:list,dato:str,flag:bool):
     lista_de = []
     lista_iz = []
     if len(jugadores) <= 1:
@@ -344,9 +348,9 @@ def quick_sort_estadistica(jugadores:list,dato:str,flag:bool):
                 lista_de.append(jugadores[i])
             elif flag == True and jugadores[i]["estadisticas"][dato] <= pivot["estadisticas"][dato] or flag == False and jugadores[i]["estadisticas"][dato] > pivot["estadisticas"][dato]:
                 lista_iz.append(jugadores[i])
-    lista_iz = quick_sort_estadistica(lista_iz,dato,flag)
+    lista_iz = quick_sort_estadisticas(lista_iz,dato,flag)
     lista_iz.append(pivot)
-    lista_de = quick_sort_estadistica(lista_de,dato,flag)
+    lista_de = quick_sort_estadisticas(lista_de,dato,flag)
     lista_iz.extend(lista_de)
     return lista_iz
 
@@ -367,8 +371,7 @@ def mostrar_promedios_mayor_al_valor(jugadores:list, dato: str):
     else:
         imprimir_dato(f"nadie supero el promedio de {valor}")
 
-# 13) Calcular y mostrar el jugador con la mayor cantidad de robos totales.
-# 14) Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.
+
 
 
     
