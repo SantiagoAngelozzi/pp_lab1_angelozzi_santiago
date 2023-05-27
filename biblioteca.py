@@ -80,15 +80,15 @@ def imprimir_menu():
     \n9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.\
     \n10) ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor.\
     \n11) ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor.\
-    \n12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.\
+    \n12) ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.\
     \n13) Calcular y mostrar el jugador con la mayor cantidad de robos totales.\
     \n14) Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.\
-    \n15)\
-    \n16)\
-    \n17)\
-    \n18)\
-    \n19)\
-    \n20)")
+    \n15) ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros libres superior a ese valor.\
+    \n16) Calcular y mostrar el promedio de puntos por partido del equipo excluyendo al jugador con la menor cantidad de puntos por partido.\
+    \n17) Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos\
+    \n18) ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor.\
+    \n19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\
+    \n20) ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.")
 
 def dream_team_menu_principal():
     '''
@@ -135,11 +135,11 @@ def dream_team_app(jugadores: list):
                 lista_ordenada = quick_sort_estadisticas(jugadores, "promedio_asistencias_por_partido", False)
                 imprimir_dato(f"el jugador con mayor promedio de asistencia por partido es: {lista_ordenada[0]['nombre']} y el promedio es: {lista_ordenada[0]['estadisticas']['promedio_asistencias_por_partido']}")
             case 10:
-                mostrar_promedios_mayor_al_valor(jugadores, "promedio_puntos_por_partido")               
+                mostrar_jugador_mayor_al_valor(jugadores, "promedio_puntos_por_partido")               
             case 11:
-                mostrar_promedios_mayor_al_valor(jugadores, "promedio_rebotes_por_partido")
+                mostrar_jugador_mayor_al_valor(jugadores, "promedio_rebotes_por_partido")
             case 12:
-                mostrar_promedios_mayor_al_valor(jugadores, "promedio_asistencias_por_partido")
+                mostrar_jugador_mayor_al_valor(jugadores, "promedio_asistencias_por_partido")
             case 13:
                 lista_ordenada = quick_sort_estadisticas(jugadores, "robos_totales", False)
                 imprimir_dato(f"el jugador con mayor cantidad de robos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['robos_totales']}")
@@ -147,23 +147,22 @@ def dream_team_app(jugadores: list):
                 lista_ordenada = quick_sort_estadisticas(jugadores, "bloqueos_totales", False)
                 imprimir_dato(f"el jugador con mayor cantidad de bloqueos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['bloqueos_totales']}")
             case 15:
-                pass
+                mostrar_jugador_mayor_al_valor(jugadores, "porcentaje_tiros_libres")
             case 16:
-                pass
+                imprimir_dato(f"el promedio de puntos por partido del equipo sacando al que menos promedio hizo es: ")
+                promedios_menos_el_peor(jugadores, "promedio_puntos_por_partido", True)
             case 17:
-                pass
+                jugador_con_mas_logros(jugadores)
             case 18:
-                pass
+                mostrar_jugador_mayor_al_valor(jugadores, "porcentaje_tiros_triples")
             case 19:
-                pass
+                lista_ordenada = quick_sort_estadisticas(jugadores, "temporadas", False)
+                imprimir_dato(f"el jugador con mayor cantidad de temporadas es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['temporadas']}")
             case 20:
                 pass
         clear_console()
 
-# 1) Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
-# Nombre Jugador - Posición. Ejemplo:
-# Michael Jordan - Escolta 
-
+#1)
 def mostrar_jugadores(jugadores: list):
     """""
     recive como parametro una lista de jugadores
@@ -173,12 +172,7 @@ def mostrar_jugadores(jugadores: list):
     if jugadores:
         for jugador in jugadores:
             imprimir_dato(f"{jugador['nombre']} - {jugador['posicion']}")
-
-#  2) Permitir al usuario seleccionar un jugador por su índice y mostrar sus estadísticas completas,
-#  incluyendo temporadas jugadas, puntos totales, promedio de puntos por partido, rebotes totales,
-#  promedio de rebotes por partido, asistencias totales, promedio de asistencias por partido, robos totales,
-#  bloqueos totales, porcentaje de tiros de campo, porcentaje de tiros libres y porcentaje de tiros triples.
-
+#2) 
 def mostrar_estadisticas_jugador(jugador) -> str:
     """""
     recive un jugador como parametro
@@ -201,7 +195,6 @@ def mostrar_estadisticas_jugador(jugador) -> str:
     imprimir_dato(dato)
     return dato
     
-
 def seleccionar_jugador_indice(jugadores: list):
     """""
     recive como parametro una lista de jugadores 
@@ -218,17 +211,8 @@ def seleccionar_jugador_indice(jugadores: list):
         dato = mostrar_estadisticas_jugador(jugador)
         return dato
     else:
-        print("Índice de jugador inválido.")
-    
-    
-
-# 3) Después de mostrar las estadísticas de un jugador seleccionado por el usuario,
-# permite al usuario guardar las estadísticas de ese jugador en un archivo CSV.
-# El archivo CSV debe contener los siguientes campos: nombre, posición, temporadas, puntos totales,
-# promedio de puntos por partido, rebotes totales, promedio de rebotes por partido, asistencias totales,
-# promedio de asistencias por partido, robos totales, bloqueos totales, porcentaje de tiros de campo,
-# porcentaje de tiros libres y porcentaje de tiros triples.
-
+        print("Índice de jugador inválido.")    
+# 3)
 def guardar_estadisticas_csv(jugadores: list):
     """""
     recive como parametro una lista de jugadores 
@@ -242,10 +226,7 @@ def guardar_estadisticas_csv(jugadores: list):
     else:
         archivo = "estadisticas_jugador.csv"
         guardar_archivo_csv(archivo, contenido)
-
-# 4) Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, como campeonatos de la NBA,
-# participaciones en el All-Star y pertenencia al Salón de la Fama del Baloncesto, etc.
-
+# 4)
 def seleccionar_jugador_por_nombre() -> str:
     """""
     da a elejir un nombre
@@ -284,9 +265,7 @@ def mostrar_logros_jugador(jugadores: list):
                 print("- " + logro)
         else: 
             print("Nombre inválido. Inténtelo nuevamente")
-
-# 5) Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team.
-
+#5)
 def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
     """""
     recive una lista de jugadores
@@ -295,15 +274,13 @@ def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
     
     """""
     acumulador_promedios = 0
-
+    
     for jugador in jugadores:
       acumulador_promedios += jugador["estadisticas"]["promedio_puntos_por_partido"]
     
     promedio_puntos_por_partido = acumulador_promedios / len(jugadores)
     imprimir_dato(promedio_puntos_por_partido)
-
-# 6) Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador es miembro del Salón de la Fama del Baloncesto.
-
+#6)
 def mostrar_jugador_salon_fama(jugadores: list):
     """""
     recive una lista de jugadores
@@ -327,15 +304,14 @@ def mostrar_jugador_salon_fama(jugadores: list):
                     imprimir_dato(f"{jugador_encontrado['nombre']} no pertenece al salon de la fama del baloncesto")
         else:
             ("Nombre inválido. Inténtelo nuevamente")
-
-
-# 7) Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.
-# 8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.
-# 9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
-# 13) Calcular y mostrar el jugador con la mayor cantidad de robos totales.
-# 14) Calcular y mostrar el jugador con la mayor cantidad de bloqueos totales.
-
+#7)-8)-9)-13)-14)-19)
 def quick_sort_estadisticas(jugadores:list,dato:str,flag:bool):
+    """""
+    recive una lista de jugadores y un dato tipo str y un flag tipo bool
+    los ordena de manera decendente o acendente depende el flag y segun el dato
+    devuele la lista ordenada
+
+    """""
     lista_de = []
     lista_iz = []
     if len(jugadores) <= 1:
@@ -353,12 +329,14 @@ def quick_sort_estadisticas(jugadores:list,dato:str,flag:bool):
     lista_de = quick_sort_estadisticas(lista_de,dato,flag)
     lista_iz.extend(lista_de)
     return lista_iz
+# 10)-11)-12)-15)-18)
+def mostrar_jugador_mayor_al_valor(jugadores:list, dato: str):
+    """""
+    recive una lista de jugadores y un dato tipo str
+    pide ingresar un valor y crea una nueva lista con los mayores a ese valor
+    si la lista contiene algo imprime los elementos y si no contiene nada lo notifica
 
-# 10) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más puntos por partido que ese valor.
-# 11) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más rebotes por partido que ese valor.
-# 12) Permitir al usuario ingresar un valor y mostrar los jugadores que han promediado más asistencias por partido que ese valor.
-
-def mostrar_promedios_mayor_al_valor(jugadores:list, dato: str):
+    """""
     valor = float(input("ingrese un valor: "))
     lista_aux = []
     for jugador in jugadores:
@@ -367,11 +345,35 @@ def mostrar_promedios_mayor_al_valor(jugadores:list, dato: str):
             lista_aux.append(jugador["nombre"])
     
     if lista_aux:
-        imprimir_dato(f"los que superan el promedio de {valor} son: {lista_aux}")
+        imprimir_dato(f"los jugadores que superan el valor de {valor} son: {lista_aux}")
     else:
-        imprimir_dato(f"nadie supero el promedio de {valor}")
+        imprimir_dato(f"ningun jugador supero el valor de {valor}")
+#16)
+def promedios_menos_el_peor(jugadores: list, dato: str, flag: bool):
+    """""
+    recive una lista de jugadores, un dato tipo str y una flag tipo bool
+    ordena la lista segun el dato y el flag y saca el primer elemento de la lista luego calcula el promedio de la nueva lista ordenada
+    retorna el promedio
+
+    """""
+    lista_ordenada = quick_sort_estadisticas(jugadores, dato, flag)
+    lista_ordenada.pop(0)
+    nuevo_promedio = calcular_promedio_puntos_por_partido_equipo(lista_ordenada)
+    return nuevo_promedio    
+#17)
+def jugador_con_mas_logros(jugadores):
+    """""
+    recive una lista de jugadores 
+    recorre la lista y guarda en una lista auxiliar los len de logros de cada jugador decubriendo quiem es jugador con el maximo de logros
+    imprime el nombre del jugador y el len de sus logros.
+    """""
+    cantidades_logros = []
+    for jugador in jugadores:
+        cantidad_logros = len(jugador["logros"])
+        cantidades_logros.append(cantidad_logros)
+        mayor_cantidad_logros = max(cantidades_logros)
+        if len(jugador["logros"]) == mayor_cantidad_logros:
+            print(f"El jugador con mas logros es {jugador['nombre']} y la cantidad de logros es {mayor_cantidad_logros}")
 
 
 
-
-    
