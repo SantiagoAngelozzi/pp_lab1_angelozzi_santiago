@@ -47,7 +47,7 @@ def guardar_archivo_csv(nombre_archivo: str, contenido: str) -> bool:
         -un valor booleano, ya sea True o False, según si el archivo se creó correctamente o no.
     """
 
-    with open(nombre_archivo, 'w+') as archivo:
+    with open(r"pp_lab1_angelozzi_santiago\biblioteca.py" + nombre_archivo, 'w+') as archivo:
         resultado = None
         resultado = archivo.write(contenido)
     if resultado:
@@ -88,7 +88,8 @@ def imprimir_menu():
     \n17) Calcular y mostrar el jugador con la mayor cantidad de logros obtenidos\
     \n18) ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor.\
     \n19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\
-    \n20) ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.")
+    \n20) ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.\
+    \n23) Calcular de cada jugador cuál es su posición en cada uno de los siguientes ranking: Puntos, Rebotes, Asistencias y Robos")
 
 def dream_team_menu_principal():
     '''
@@ -96,7 +97,7 @@ def dream_team_menu_principal():
     retorna un numero entero
     '''
     opcion = input("Seleccione opción: ")
-    if re.match(r"^(?:[1-9]|1\d|20)$",opcion):
+    if re.match(r"^(?:[1-9]|1\d|20|23)$",opcion):
         opcion = int(opcion)
         return opcion
     else:
@@ -165,6 +166,8 @@ def dream_team_app(jugadores: list):
                 imprimir_dato(f"el jugador con mayor cantidad de temporadas es: {lista_ordenada[0]} y la cantidad es: {lista_ordenada[0]['estadisticas']['temporadas']}")
             case 20:
                 mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores, "porcentaje_tiros_de_campo")
+            case 23:
+                guardar_ranking_csv(jugadores)
         clear_console()
 
 #1)
@@ -375,7 +378,7 @@ def jugador_con_mas_logros(jugadores):
         mayor_cantidad_logros = max(cantidades_logros)
         if len(jugador["logros"]) == mayor_cantidad_logros:
             imprimir_dato(f"El jugador con mas logros es {jugador['nombre']} y la cantidad de logros es {mayor_cantidad_logros}")
-#20) Permitir al usuario ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.
+#20)
 def mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores:list, dato: str):
     """""
     recive una lista de jugadores  un dato tipo str
@@ -390,3 +393,44 @@ def mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores:list, dato
         dato_actual = jugador["estadisticas"][dato]
         if dato_actual > valor:
             imprimir_dato(f"nombre: {jugador['nombre']} - pocicion: {jugador['posicion']} - porcennaje de tiros de campo: {jugador['estadisticas']['porcentaje_tiros_de_campo']}")
+#23)
+def guardar_ranking_csv(jugadores:list):
+    """
+     Recibe la lista de jugadores.
+     Guarda un archivo CSV con la posicion de cada jugador, en robos, rebotes, asistencias y puntos.
+   
+    
+    """
+ 
+    lista_de_jugadores = jugadores[:]
+    ruta = r"pp_lab1_angelozzi_santiago\biblioteca.py"
+
+    lista_por_puntos = quick_sort_estadisticas(lista_de_jugadores,"puntos_totales", False)
+    lista_por_rebotes = quick_sort_estadisticas(lista_de_jugadores,"rebotes_totales", False)
+    lista_por_asistencias = quick_sort_estadisticas(lista_de_jugadores,"asistencias_totales", False)
+    lista_por_robos = quick_sort_estadisticas(lista_de_jugadores,"robos_totales", False)
+
+    with open(ruta + "ranking_estadisticas.csv", "w") as archivo:
+        archivo.write("Jugador,Puntos,Rebotes,Asistencias,Robos\n")
+        
+        for jugador in lista_de_jugadores:
+            for jugador_ordenado in lista_por_puntos:
+                if re.match(jugador["nombre"], jugador_ordenado["nombre"]):
+                    indice_por_puntos = lista_por_puntos.index(jugador_ordenado)
+
+            for jugador_ordenado in lista_por_rebotes:
+                if re.match(jugador["nombre"], jugador_ordenado["nombre"]):
+                    indice_por_rebotes = lista_por_rebotes.index(jugador_ordenado)
+
+            for jugador_ordenado in lista_por_asistencias:
+                if re.match(jugador["nombre"], jugador_ordenado["nombre"]):
+                    indice_por_asistencias = lista_por_asistencias.index(jugador_ordenado)
+
+            for jugador_ordenado in lista_por_robos:
+                if re.match(jugador["nombre"], jugador_ordenado["nombre"]):
+                    indice_por_robos = lista_por_robos.index(jugador_ordenado)
+
+            mensaje = f"{jugador['nombre']},{indice_por_puntos + 1},{indice_por_rebotes + 1},{indice_por_asistencias + 1},{indice_por_robos + 1}\n"
+
+            archivo.write(mensaje)
+            
