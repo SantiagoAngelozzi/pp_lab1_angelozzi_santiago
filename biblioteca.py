@@ -63,7 +63,26 @@ def imprimir_menu():
     '''
     imprime el menu
     '''
-    imprimir_dato("1) Mostrar la lista de todos los jugadores del Dream Team\n2) elije un jugador para mostrar sus estadisticas\n3) elije un jugador para mostrar sus estadisticas y descargarlo en csv \n4) \n5) \n6) \n7) \n8) \n9) \n10) \n11) \n12) \n13) \n14) \n15) \n16) \n17) \n18) \n19) \n20)  ")
+    imprimir_dato("1) Mostrar la lista de todos los jugadores del Dream Team\
+    \n2) elije un jugador para mostrar sus estadisticas\
+    \n3) elije un jugador para mostrar sus estadisticas y descargarlo en csv\
+    \n4) mostrar logros del jugador\
+    \n5) calcular promedio de puntos por partidos del dream team\
+    \n6) pregunatar si un jugador pertenece o no al salon de la fama del baloncesto\
+    \n7)\
+    \n8)\
+    \n9)\
+    \n10)\
+    \n11)\
+    \n12)\
+    \n13)\
+    \n14)\
+    \n15)\
+    \n16)\
+    \n17)\
+    \n18)\
+    \n19)\
+    \n20)")
 
 def dream_team_menu_principal():
     '''
@@ -97,9 +116,9 @@ def dream_team_app(jugadores: list):
             case 4:
                 mostrar_logros_jugador(jugadores)
             case 5:
-                pass
+                calcular_promedio_puntos_por_partido_equipo(jugadores)
             case 6:
-                pass
+                mostrar_jugador_salon_fama(jugadores)
             case 7:
                 pass
             case 8:
@@ -200,7 +219,13 @@ def seleccionar_jugador_indice(jugadores: list):
 # promedio de asistencias por partido, robos totales, bloqueos totales, porcentaje de tiros de campo,
 # porcentaje de tiros libres y porcentaje de tiros triples.
 
-def guardar_estadisticas_csv(jugadores):
+def guardar_estadisticas_csv(jugadores: list):
+    """""
+    recive como parametro una lista de jugadores 
+    recorre la lista imprime los jugadores ordenados por indice y da a elejir uno
+    y guarda en un archivo csv el resultado
+    
+    """""
     contenido = seleccionar_jugador_indice(jugadores)
     archivo = "estadisticas_jugador.csv"
     guardar_archivo_csv(archivo, contenido)
@@ -209,6 +234,12 @@ def guardar_estadisticas_csv(jugadores):
 # participaciones en el All-Star y pertenencia al Salón de la Fama del Baloncesto, etc.
 
 def seleccionar_jugador_por_nombre()->str:
+    """""
+    da a elejir un nombre
+    veriica que sea valido
+    retorna el patron introducido
+    
+    """""
     nombre = input("Escribir nombre de jugador: ")
     patron = ""
     if re.match(r"^[A-Za-z ]{3}",nombre):
@@ -217,7 +248,13 @@ def seleccionar_jugador_por_nombre()->str:
         imprimir_dato("Nombre inválido. Inténtelo nuevamente")
     return patron
 
-def mostrar_logros_jugador(jugadores):
+def mostrar_logros_jugador(jugadores: list):
+    """""
+    recive una lista de jugadores
+    da a elejir un nombre de jugador, verifica que sea valido
+    imprime los logros del jugador
+    
+    """""
     patron = seleccionar_jugador_por_nombre()
     jugador_encontrado = None
     for jugador in jugadores:
@@ -231,8 +268,48 @@ def mostrar_logros_jugador(jugadores):
     else:
         print("Jugador no encontrado.")
 
+# 5) Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team.
+
+def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
+    """""
+    recive una lista de jugadores
+    recorre la lista y calcula el promedio de puntos por partido del equipo
+    imprime el resultado
+    
+    """""
+    acumulador_promedios = 0
+
+    for jugador in jugadores:
+      acumulador_promedios += jugador["estadisticas"]["promedio_puntos_por_partido"]
+    
+    promedio_puntos_por_partido = acumulador_promedios / len(jugadores)
+    imprimir_dato(promedio_puntos_por_partido)
+
+# 6) Permitir al usuario ingresar el nombre de un jugador y mostrar si ese jugador es miembro del Salón de la Fama del Baloncesto.
+
+def mostrar_jugador_salon_fama(jugadores: list):
+    """""
+    recive una lista de jugadores
+    da a eljir un nombre, verifica que sea valido
+    imprime si pertenece o no al salon de la fama 
+
+    """""
+    patron = seleccionar_jugador_por_nombre()
+    for jugador in jugadores:
+        if re.search(patron, jugador['nombre']):
+            jugador_encontrado = jugador
+            break
+    if jugador_encontrado is not None:
+            if "Miembro del Salon de la Fama del Baloncesto" in jugador_encontrado["logros"]:
+                imprimir_dato(f"{jugador_encontrado['nombre']} pertenece al salon de la fama del baloncesto")
+            else:
+                imprimir_dato(f"{jugador_encontrado['nombre']} no pertenece al salon de la fama del baloncesto")
 
 
+
+
+
+        
 
 
 
