@@ -1,6 +1,12 @@
+"""""""""
+Santiago Angelozzi
+DIV-E
+Parcial
+"""""""""
 import json
 import os
 import re
+
 #0) funciones reutilizables o complementarias.
 def clear_console() -> None:
     """
@@ -69,9 +75,9 @@ def imprimir_menu():
     \n4) mostrar logros del jugador\
     \n5) calcular promedio de puntos por partidos del dream team\
     \n6) pregunatar si un jugador pertenece o no al salon de la fama del baloncesto\
-    \n7)\
-    \n8)\
-    \n9)\
+    \n7) Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.\
+    \n8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.\
+    \n9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.\
     \n10)\
     \n11)\
     \n12)\
@@ -120,11 +126,14 @@ def dream_team_app(jugadores: list):
             case 6:
                 mostrar_jugador_salon_fama(jugadores)
             case 7:
-                pass
+                lista_ordenada = quick_sort_estadistica(jugadores, "rebotes_totales", False)
+                imprimir_dato(f"el jugador con mayor cantidad de rebotes totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['rebotes_totales']}")
             case 8:
-                pass
+                lista_ordenada = quick_sort_estadistica(jugadores, "porcentaje_tiros_de_campo", False)
+                imprimir_dato(f"el jugador con mayor porcentaje de tiros de campo es: {lista_ordenada[0]['nombre']} y el porcemtaje es: {lista_ordenada[0]['estadisticas']['porcentaje_tiros_de_campo']}")
             case 9:
-                pass
+                lista_ordenada = quick_sort_estadistica(jugadores, "promedio_asistencias_por_partido", False)
+                imprimir_dato(f"el jugador con mayor promedio de asistencia por partido es: {lista_ordenada[0]['nombre']} y el promedio es: {lista_ordenada[0]['estadisticas']['promedio_asistencias_por_partido']}")
             case 10:
                 pass
             case 11:
@@ -147,8 +156,6 @@ def dream_team_app(jugadores: list):
                 pass
             case 20:
                 pass
-            case _:
-                print("Error: opción incorrecta, intente de nuevo")
         clear_console()
 
 # 1) Mostrar la lista de todos los jugadores del Dream Team. Con el formato:
@@ -207,9 +214,10 @@ def seleccionar_jugador_indice(jugadores: list):
     if seleccion >= 0 and seleccion < len(jugadores):
         jugador = jugadores[seleccion]
         dato = mostrar_estadisticas_jugador(jugador)
+        return dato
     else:
         print("Índice de jugador inválido.")
-    return dato
+    
     
 
 # 3) Después de mostrar las estadísticas de un jugador seleccionado por el usuario,
@@ -227,13 +235,16 @@ def guardar_estadisticas_csv(jugadores: list):
     
     """""
     contenido = seleccionar_jugador_indice(jugadores)
-    archivo = "estadisticas_jugador.csv"
-    guardar_archivo_csv(archivo, contenido)
+    if contenido == None:
+        return "no se pudo realizar la operacion"
+    else:
+        archivo = "estadisticas_jugador.csv"
+        guardar_archivo_csv(archivo, contenido)
 
 # 4) Permitir al usuario buscar un jugador por su nombre y mostrar sus logros, como campeonatos de la NBA,
 # participaciones en el All-Star y pertenencia al Salón de la Fama del Baloncesto, etc.
 
-def seleccionar_jugador_por_nombre()->str:
+def seleccionar_jugador_por_nombre() -> str:
     """""
     da a elejir un nombre
     veriica que sea valido
@@ -244,9 +255,10 @@ def seleccionar_jugador_por_nombre()->str:
     patron = ""
     if re.match(r"^[A-Za-z ]{3}",nombre):
         patron = nombre
+        return patron
     else:
-        imprimir_dato("Nombre inválido. Inténtelo nuevamente")
-    return patron
+       imprimir_dato("Nombre inválido. Inténtelo nuevamente")
+       return -1
 
 def mostrar_logros_jugador(jugadores: list):
     """""
@@ -255,18 +267,21 @@ def mostrar_logros_jugador(jugadores: list):
     imprime los logros del jugador
     
     """""
-    patron = seleccionar_jugador_por_nombre()
     jugador_encontrado = None
-    for jugador in jugadores:
-        if re.search(patron, jugador['nombre']):
-            jugador_encontrado = jugador
-            break
-    if jugador_encontrado is not None:
-        imprimir_dato(f"Logros de: {jugador_encontrado['nombre']}")
-        for logro in jugador_encontrado['logros']:
-            print("- " + logro)
+    patron = seleccionar_jugador_por_nombre()
+    if patron == -1:
+        pass
     else:
-        print("Jugador no encontrado.")
+        for jugador in jugadores:
+            if re.search(patron, jugador['nombre']):
+                jugador_encontrado = jugador
+                break
+        if jugador_encontrado is not None:
+            imprimir_dato(f"Logros de: {jugador_encontrado['nombre']}")
+            for logro in jugador_encontrado['logros']:
+                print("- " + logro)
+        else: 
+            print("Nombre inválido. Inténtelo nuevamente")
 
 # 5) Calcular y mostrar el promedio de puntos por partido de todo el equipo del Dream Team.
 
@@ -295,41 +310,43 @@ def mostrar_jugador_salon_fama(jugadores: list):
 
     """""
     patron = seleccionar_jugador_por_nombre()
-    for jugador in jugadores:
-        if re.search(patron, jugador['nombre']):
-            jugador_encontrado = jugador
-            break
-    if jugador_encontrado is not None:
-            if "Miembro del Salon de la Fama del Baloncesto" in jugador_encontrado["logros"]:
-                imprimir_dato(f"{jugador_encontrado['nombre']} pertenece al salon de la fama del baloncesto")
-            else:
-                imprimir_dato(f"{jugador_encontrado['nombre']} no pertenece al salon de la fama del baloncesto")
+    jugador_encontrado = None
+    if patron == -1:
+        pass
+    else:
+        for jugador in jugadores:
+            if re.search(patron, jugador['nombre']):
+                jugador_encontrado = jugador
+                break
+        if jugador_encontrado is not None:
+                if "Miembro del Salon de la Fama del Baloncesto" in jugador_encontrado["logros"]:
+                    imprimir_dato(f"{jugador_encontrado['nombre']} pertenece al salon de la fama del baloncesto")
+                elif "Miembro del Salon de la Fama del Baloncesto" not in jugador_encontrado["logros"]:
+                    imprimir_dato(f"{jugador_encontrado['nombre']} no pertenece al salon de la fama del baloncesto")
+        else:
+            ("Nombre inválido. Inténtelo nuevamente")
 
 
+# 7) Calcular y mostrar el jugador con la mayor cantidad de rebotes totales.
+# 8) Calcular y mostrar el jugador con el mayor porcentaje de tiros de campo.
+# 9) Calcular y mostrar el jugador con la mayor cantidad de asistencias totales.
 
-
-
-        
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-    
-    
-    
-
-
-    
+def quick_sort_estadistica(jugadores:list,dato:str,flag:bool):
+    lista_de = []
+    lista_iz = []
+    if len(jugadores) <= 1:
+            return jugadores
+    else:
+        cantidad = len(jugadores)
+        pivot = jugadores[0]
+        for i in range(1,cantidad):
+            if flag == True and jugadores[i]["estadisticas"][dato] > pivot["estadisticas"][dato] or flag == False and jugadores[i]["estadisticas"][dato] < pivot["estadisticas"][dato]:
+                lista_de.append(jugadores[i])
+            elif flag == True and jugadores[i]["estadisticas"][dato] <= pivot["estadisticas"][dato] or flag == False and jugadores[i]["estadisticas"][dato] > pivot["estadisticas"][dato]:
+                lista_iz.append(jugadores[i])
+    lista_iz = quick_sort_estadistica(lista_iz,dato,flag)
+    lista_iz.append(pivot)
+    lista_de = quick_sort_estadistica(lista_de,dato,flag)
+    lista_iz.extend(lista_de)
+    return lista_iz
 
