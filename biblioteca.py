@@ -32,31 +32,6 @@ def leer_archivo_json(ruta: str) -> list:
         lista_jugadores = contenido["jugadores"]
     return lista_jugadores
 
-def guardar_archivo_csv(nombre_archivo: str, contenido: str) -> bool:
-    """
-    Esta función guarda el contenido de una cadena en un archivo con el nombre de archivo dado y
-    devuelve un valor booleano que indica si la operación fue exitosa o no.
-
-    Parametros: 
-        -nombre_archivo: Una cadena que representa el nombre del archivo que se va a crear o
-        sobrescribir
-
-        -contenido: El contenido que se escribirá en el archivo. Debería ser una cadena
-
-    :retorno: 
-        -un valor booleano, ya sea True o False, según si el archivo se creó correctamente o no.
-    """
-
-    with open(r"pp_lab1_angelozzi_santiago\biblioteca.py" + nombre_archivo, 'w+') as archivo:
-        resultado = None
-        resultado = archivo.write(contenido)
-    if resultado:
-        print("Se creó el archivo: {0}".format(nombre_archivo))
-        return True
-
-    print("Error al crear el archivo: {0}".format(nombre_archivo))
-    return False
-
 def imprimir_dato(dato : str):
     '''
     recive un dato tipo str
@@ -216,24 +191,29 @@ def seleccionar_jugador_indice(jugadores: list):
     seleccion -= 1
     if seleccion >= 0 and seleccion < len(jugadores):
         jugador = jugadores[seleccion]
-        dato = mostrar_estadisticas_jugador(jugador)
-        return dato
+        mostrar_estadisticas_jugador(jugador)
     else:
-        imprimir_dato("Índice de jugador inválido.")    
-# 3)
-def guardar_estadisticas_csv(jugadores: list):
-    """""
-    recive como parametro una lista de jugadores 
-    recorre la lista imprime los jugadores ordenados por indice y da a elejir uno
-    y guarda en un archivo csv el resultado
-    
-    """""
-    contenido = seleccionar_jugador_indice(jugadores)
-    if contenido == None:
-        return "no se pudo realizar la operacion"
-    else:
-        archivo = "estadisticas_jugador.csv"
-        guardar_archivo_csv(archivo, contenido)
+        imprimir_dato("Índice de jugador inválido.")
+    return seleccion 
+# 3)   
+def guardar_estadisticas_csv(jugadores:list):
+    """
+    - Guarda en un CSV las estadisticas del jugador seleccionado en el punto 2.
+    - Recibe la lista de jugadores y el indice elegido anteriormente.
+    - No retorna nada.
+    """
+    ruta = r"pp_lab1_angelozzi_santiago\biblioteca.py"
+    indice = seleccionar_jugador_indice(jugadores)
+    lista_de_jugadores = jugadores[:]
+
+    with open(ruta + lista_de_jugadores[indice]["nombre"] + ".csv", "w") as archivo:
+        for estadistica in lista_de_jugadores[indice]["estadisticas"]:         
+            archivo.write(f"{estadistica},")
+
+        archivo.write("\n")  
+
+        for estadistica in lista_de_jugadores[indice]["estadisticas"]: 
+            archivo.write(f"{lista_de_jugadores[indice]['estadisticas'][estadistica]},")  
 # 4)
 def seleccionar_jugador_por_nombre() -> str:
     """""
