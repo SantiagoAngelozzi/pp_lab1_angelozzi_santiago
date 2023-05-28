@@ -16,6 +16,26 @@ def clear_console() -> None:
     _ = input('Press a key to continue...')
     os.system('cls')
 
+def validar_numero(num):
+    '''
+    recive un numero
+    verifica que se un numero
+    devuelve un bool
+    '''
+    return num.isdigit()
+
+def validar_entero():
+    '''
+    recive un numero str
+    verifica que sea un numero con la funcion previamente creada
+    retorna un numero entero
+    '''
+    valor = input("Ingrese un valor: ")
+    while not validar_numero(valor):
+        print("Error: debe ingresar un número entero")
+        valor = input("Ingrese un valoir: ")
+    return float(valor)
+
 def leer_archivo_json(ruta: str) -> list:
     """
     Esta función lee un archivo JSON de una ruta determinada y devuelve una lista de héroes.
@@ -98,7 +118,8 @@ def dream_team_app(jugadores: list):
             case 4:
                 mostrar_logros_jugador(jugadores)
             case 5:
-                calcular_promedio_puntos_por_partido_equipo(jugadores)
+                promedio = calcular_promedio_puntos_por_partido_equipo(jugadores)
+                imprimir_dato(f"el promdeio de puntos por partido del dream team es: {promedio}")
             case 6:
                 mostrar_jugador_salon_fama(jugadores)
             case 7:
@@ -112,13 +133,22 @@ def dream_team_app(jugadores: list):
                 imprimir_dato(f"el jugador con mayor promedio de asistencia por partido es: {lista_ordenada[0]['nombre']} y el promedio es: {lista_ordenada[0]['estadisticas']['promedio_asistencias_por_partido']}")
             case 10:
                 lista = jugadores_mayor_al_valor(jugadores, "promedio_puntos_por_partido")
-                imprimir_dato(f"los jugadores que superan el valor son: \n {lista}")               
+                if lista:
+                        imprimir_dato(f"los jugadores que superan el valor son:\n{lista}")
+                else:
+                    imprimir_dato("nadie supero el valor")               
             case 11:
                 lista = jugadores_mayor_al_valor(jugadores, "promedio_rebotes_por_partido")
-                imprimir_dato(f"los jugadores que superan el valor son: \n {lista}")
+                if lista:
+                        imprimir_dato(f"los jugadores que superan el valor son:\n{lista}")
+                else:
+                    imprimir_dato("nadie supero el valor") 
             case 12:
                 lista = jugadores_mayor_al_valor(jugadores, "promedio_asistencias_por_partido")
-                imprimir_dato(f"los jugadores que superan el valor son: \n {lista}")
+                if lista:
+                        imprimir_dato(f"los jugadores que superan el valor son:\n{lista}")
+                else:
+                    imprimir_dato("nadie supero el valor") 
             case 13:
                 lista_ordenada = quick_sort_estadisticas(jugadores, "robos_totales", False)
                 imprimir_dato(f"el jugador con mayor cantidad de robos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['robos_totales']}")
@@ -127,18 +157,23 @@ def dream_team_app(jugadores: list):
                 imprimir_dato(f"el jugador con mayor cantidad de bloqueos totales es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['bloqueos_totales']}")
             case 15:
                 lista = jugadores_mayor_al_valor(jugadores, "porcentaje_tiros_libres")
-                imprimir_dato(f"los jugadores que superan el valor son: \n {lista}")
+                if lista:
+                        imprimir_dato(f"los jugadores que superan el valor son:\n{lista}")
+                else:
+                    imprimir_dato("nadie supero el valor")
             case 16:
                 imprimir_dato(f"el promedio de puntos por partido del equipo sacando al que menos promedio hizo es: ")
                 promedios_menos_el_peor(jugadores, "promedio_puntos_por_partido", True)
             case 17:
                 jugador_con_mas_logros(jugadores)
             case 18:
-                lista = jugadores_mayor_al_valor(jugadores, "porcentaje_tiros_triples")
-                imprimir_dato(f"los jugadores que superan el valor son: \n {lista}")
+                if lista:
+                        imprimir_dato(f"los jugadores que superan el valor son:\n{lista}")
+                else:
+                    imprimir_dato("nadie supero el valor") 
             case 19:
                 lista_ordenada = quick_sort_estadisticas(jugadores, "temporadas", False)
-                imprimir_dato(f"el jugador con mayor cantidad de temporadas es: {lista_ordenada[0]} y la cantidad es: {lista_ordenada[0]['estadisticas']['temporadas']}")
+                imprimir_dato(f"el jugador con mayor cantidad de temporadas es: {lista_ordenada[0]['nombre']} y la cantidad es: {lista_ordenada[0]['estadisticas']['temporadas']}")
             case 20:
                 mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores, "porcentaje_tiros_de_campo")
             case 23:
@@ -228,7 +263,6 @@ def seleccionar_jugador_por_nombre() -> str:
         patron = nombre
         return patron
     else:
-       imprimir_dato("Nombre inválido. Inténtelo nuevamente")
        return -1
 
 def mostrar_logros_jugador(jugadores: list):
@@ -267,7 +301,7 @@ def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
       acumulador_promedios += jugador["estadisticas"]["promedio_puntos_por_partido"]
     
     promedio_puntos_por_partido = acumulador_promedios / len(jugadores)
-    imprimir_dato(promedio_puntos_por_partido)
+    return promedio_puntos_por_partido
 #6)
 def mostrar_jugador_salon_fama(jugadores: list):
     """""
@@ -279,6 +313,7 @@ def mostrar_jugador_salon_fama(jugadores: list):
     patron = seleccionar_jugador_por_nombre()
     jugador_encontrado = None
     if patron == -1:
+        imprimir_dato("Nombre inválido. Inténtelo nuevamente")
         pass
     else:
         for jugador in jugadores:
@@ -325,7 +360,7 @@ def jugadores_mayor_al_valor(jugadores:list, dato: str):
     si la lista contiene algo imprime los elementos y si no contiene nada lo notifica
 
     """""
-    valor = float(input("ingrese un valor: "))
+    valor = validar_entero()
     lista_aux = []
     for jugador in jugadores:
         dato_actual = jugador["estadisticas"][dato]
@@ -361,14 +396,14 @@ def jugador_con_mas_logros(jugadores):
 #20)
 def mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores:list, dato: str):
     """""
-    recive una lista de jugadores  un dato tipo str
+    recive una lista de jugadores un dato tipo str
     ordena los jugadores por pocicion alabeticamente
     pide un valor y filtra los que superan ese valor
     y los imprime mostrando nombre pocicion y porcentaje
 
     """""
     jugadores_ordenados = sorted(jugadores, key=lambda x: x["posicion"])
-    valor = float(input("ingrese un valor: "))
+    valor = validar_entero()
     for jugador in jugadores_ordenados:
         dato_actual = jugador["estadisticas"][dato]
         if dato_actual > valor:
@@ -412,5 +447,4 @@ def guardar_ranking_csv(jugadores:list):
 
             mensaje = f"{jugador['nombre']},{indice_por_puntos + 1},{indice_por_rebotes + 1},{indice_por_asistencias + 1},{indice_por_robos + 1}\n"
 
-            archivo.write(mensaje)
-            
+            archivo.write(mensaje)           
