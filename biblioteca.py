@@ -250,7 +250,7 @@ def guardar_estadisticas_csv(jugadores:list):
         for estadistica in lista_de_jugadores[indice]["estadisticas"]: 
             archivo.write(f"{lista_de_jugadores[indice]['estadisticas'][estadistica]},")  
 # 4)
-def seleccionar_jugador_por_nombre() -> str:
+def seleccionar_jugador_por_nombre():
     """""
     da a elejir un nombre
     veriica que sea valido
