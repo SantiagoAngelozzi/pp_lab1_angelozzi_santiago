@@ -84,7 +84,11 @@ def imprimir_menu():
     \n18) ingresar un valor y mostrar los jugadores que hayan tenido un porcentaje de tiros triples superior a ese valor.\
     \n19) Calcular y mostrar el jugador con la mayor cantidad de temporadas jugadas\
     \n20) ingresar un valor y mostrar los jugadores , ordenados por posición en la cancha, que hayan tenido un porcentaje de tiros de campo superior a ese valor.\
-    \n23) Calcular de cada jugador cuál es su posición en cada uno de los siguientes ranking: Puntos, Rebotes, Asistencias y Robos")
+    \n23) Calcular de cada jugador cuál es su posición en cada uno de los siguientes ranking: Puntos, Rebotes, Asistencias y Robos\
+    \n24) Determinar la cantidad de jugadores que hay por cada posición.\
+    \n25) Mostrar la lista de jugadores ordenadas por la cantidad de All-Star de forma descendente.\
+    \n26) Determinar la cantidad de jugadores que hay por cada posición.\
+    \n27) Determinar qué jugador tiene las mejores estadísticas de todos.")
 
 def dream_team_menu_principal():
     '''
@@ -92,7 +96,7 @@ def dream_team_menu_principal():
     retorna un numero entero
     '''
     opcion = input("Seleccione opción: ")
-    if re.match(r"^(?:[1-9]|1\d|20|23)$",opcion):
+    if re.match(r"^(?:[1-9]|1\d|20|23|24|25|26|27)$",opcion):
         opcion = int(opcion)
         return opcion
     else:
@@ -101,7 +105,7 @@ def dream_team_menu_principal():
 
 def dream_team_app(jugadores: list):
     '''
-    recive una lista
+    recibe una lista
     intercactua con todas la funciones previas
 
     '''
@@ -178,13 +182,21 @@ def dream_team_app(jugadores: list):
                 mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores, "porcentaje_tiros_de_campo")
             case 23:
                 guardar_ranking_csv(jugadores)
+            case 24:
+                jugadores_por_pocicion(jugadores)
+            case 25:
+                pass
+            case 26:
+                imprimir_el_mejor_por_estadistica(jugadores)
+            case 27:
+                pass
         clear_console()
 
 #1)
 def mostrar_jugadores(jugadores: list):
     """""
-    recive como parametro una lista de jugadores
-    recorre la lista  imprime nombre y pocicion de los jugadores
+    recibe como parametro una lista de jugadores
+    recorre la lista imprime nombre y pocicion de los jugadores
     
     """""
     if jugadores:
@@ -193,9 +205,8 @@ def mostrar_jugadores(jugadores: list):
 #2) 
 def mostrar_estadisticas_jugador(jugador) -> str:
     """""
-    recive un jugador como parametro
+    recibe un jugador como parametro
     imprime nombre, pocicion y todas las estadisticas
-    retorna la lista de estadisticas del jugador
     """""
     dato = f"{jugador['nombre']} - {jugador['posicion']}\
     \nTemporadas jugadas: {jugador['estadisticas']['temporadas']}\
@@ -211,12 +222,11 @@ def mostrar_estadisticas_jugador(jugador) -> str:
     \nPorcentaje de tiros libres: {jugador['estadisticas']['porcentaje_tiros_libres']}\
     \nPorcentaje de tiros triples: {jugador['estadisticas']['porcentaje_tiros_triples']}"
     imprimir_dato(dato)
-    return dato
     
 def seleccionar_jugador_indice(jugadores: list):
     """""
     recive como parametro una lista de jugadores 
-    recorre la lista imprime los jugadores ordenados por indice y da a elejir uno
+    recorre la lista imprime los jugadores ordenados por indice y da a elegir uno
     """""
     indice = 0
     for jugador in jugadores:
@@ -233,9 +243,8 @@ def seleccionar_jugador_indice(jugadores: list):
 # 3)   
 def guardar_estadisticas_csv(jugadores:list):
     """
-    - Guarda en un CSV las estadisticas del jugador seleccionado en el punto 2.
-    - Recibe la lista de jugadores y el indice elegido anteriormente.
-    - No retorna nada.
+    Guarda en un CSV las estadisticas del jugador seleccionado.
+    Recibe la lista de jugadores y el indice elegido anteriormente.
     """
     ruta = r"pp_lab1_angelozzi_santiago\biblioteca.py"
     indice = seleccionar_jugador_indice(jugadores)
@@ -252,7 +261,7 @@ def guardar_estadisticas_csv(jugadores:list):
 # 4)
 def seleccionar_jugador_por_nombre():
     """""
-    da a elejir un nombre
+    da a elegir un nombre
     veriica que sea valido
     retorna el patron introducido
     
@@ -267,8 +276,8 @@ def seleccionar_jugador_por_nombre():
 
 def mostrar_logros_jugador(jugadores: list):
     """""
-    recive una lista de jugadores
-    da a elejir un nombre de jugador, verifica que sea valido
+    Recibe una lista de jugadores
+    da a elegir un nombre de jugador, verifica que sea valido
     imprime los logros del jugador
     
     """""
@@ -290,7 +299,7 @@ def mostrar_logros_jugador(jugadores: list):
 #5)
 def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
     """""
-    recive una lista de jugadores
+    recibe una lista de jugadores
     recorre la lista y calcula el promedio de puntos por partido del equipo
     imprime el resultado
     
@@ -305,7 +314,7 @@ def calcular_promedio_puntos_por_partido_equipo(jugadores: list):
 #6)
 def mostrar_jugador_salon_fama(jugadores: list):
     """""
-    recive una lista de jugadores
+    recibe una lista de jugadores
     da a eljir un nombre, verifica que sea valido
     imprime si pertenece o no al salon de la fama 
 
@@ -330,7 +339,7 @@ def mostrar_jugador_salon_fama(jugadores: list):
 #7)-8)-9)-13)-14)-19) 
 def quick_sort_estadisticas(jugadores:list,dato:str,flag:bool):
     """""
-    recive una lista de jugadores y un dato tipo str y un flag tipo bool
+    recibe una lista de jugadores y un dato tipo str y un flag tipo bool
     los ordena de manera decendente o acendente depende el flag y segun el dato
     devuele la lista ordenada
 
@@ -355,7 +364,7 @@ def quick_sort_estadisticas(jugadores:list,dato:str,flag:bool):
 # 10)-11)-12)-15)-18)
 def jugadores_mayor_al_valor(jugadores:list, dato: str):
     """""
-    recive una lista de jugadores y un dato tipo str
+    recibe una lista de jugadores y un dato tipo str
     pide ingresar un valor y crea una nueva lista con los mayores a ese valor
     si la lista contiene algo imprime los elementos y si no contiene nada lo notifica
 
@@ -370,7 +379,7 @@ def jugadores_mayor_al_valor(jugadores:list, dato: str):
 #16)
 def promedios_menos_el_peor(jugadores: list, dato: str, flag: bool):
     """""
-    recive una lista de jugadores, un dato tipo str y una flag tipo bool
+    recibe una lista de jugadores, un dato tipo str y una flag tipo bool
     ordena la lista segun el dato y el flag y saca el primer elemento de la lista luego calcula el promedio de la nueva lista ordenada
     retorna el promedio
 
@@ -382,7 +391,7 @@ def promedios_menos_el_peor(jugadores: list, dato: str, flag: bool):
 #17)
 def jugador_con_mas_logros(jugadores):
     """""
-    recive una lista de jugadores 
+    recibe una lista de jugadores 
     recorre la lista y guarda en una lista auxiliar los len de logros de cada jugador decubriendo quiem es jugador con el maximo de logros
     imprime el nombre del jugador y el len de sus logros.
     """""
@@ -396,7 +405,7 @@ def jugador_con_mas_logros(jugadores):
 #20)
 def mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores:list, dato: str):
     """""
-    recive una lista de jugadores un dato tipo str
+    recibe una lista de jugadores un dato tipo str
     ordena los jugadores por pocicion alabeticamente
     pide un valor y filtra los que superan ese valor
     y los imprime mostrando nombre pocicion y porcentaje
@@ -407,7 +416,7 @@ def mostrar_jugadores_ordenados_por_pocicion_mayor_al_valor(jugadores:list, dato
     for jugador in jugadores_ordenados:
         dato_actual = jugador["estadisticas"][dato]
         if dato_actual > valor:
-            imprimir_dato(f"nombre: {jugador['nombre']} - pocicion: {jugador['posicion']} - porcennaje de tiros de campo: {jugador['estadisticas']['porcentaje_tiros_de_campo']}")
+            imprimir_dato(f"nombre: {jugador['nombre']} - pocicion: {jugador['posicion']} - porcentaje de tiros de campo: {jugador['estadisticas']['porcentaje_tiros_de_campo']}")
 #23)
 def guardar_ranking_csv(jugadores:list):
     """
@@ -416,7 +425,6 @@ def guardar_ranking_csv(jugadores:list):
    
     
     """
- 
     lista_de_jugadores = jugadores[:]
     ruta = r"pp_lab1_angelozzi_santiago\biblioteca.py"
 
@@ -448,3 +456,42 @@ def guardar_ranking_csv(jugadores:list):
             mensaje = f"{jugador['nombre']},{indice_por_puntos + 1},{indice_por_rebotes + 1},{indice_por_asistencias + 1},{indice_por_robos + 1}\n"
 
             archivo.write(mensaje)           
+# 24) Determinar la cantidad de jugadores que hay por cada posición.
+def jugadores_por_pocicion(jugadores: list):
+    """""
+    recibe una lista de jugadores 
+    recorre la lista y guarda en un diccionario la cantidad de jugadores por pocicion
+    imprime el diccionario 
+
+    """""
+    jugadores_por_posicion = {}
+    for jugador in jugadores:
+        posicion = jugador["posicion"]
+        if posicion in jugadores_por_posicion:
+            jugadores_por_posicion[posicion] += 1
+        else:
+            jugadores_por_posicion[posicion] = 1
+    imprimir_dato(jugadores_por_posicion)
+
+# 26 )Determinar qué jugador tiene las mejores estadísticas en cada valor.
+def imprimir_el_mejor_por_estadistica(jugadores):
+    """""
+    recive una lista de jugadores
+    ordena decendentemente por cada estadistica
+    imprime mejor de cada una de ellas
+    
+    """""
+    lista_por_puntos = quick_sort_estadisticas(jugadores,"puntos_totales", False)
+    lista_por_rebotes = quick_sort_estadisticas(jugadores,"rebotes_totales", False)
+    lista_por_asistencias = quick_sort_estadisticas(jugadores,"asistencias_totales", False)
+    lista_por_robos = quick_sort_estadisticas(jugadores,"robos_totales", False)
+    lista_por_bloqueo = quick_sort_estadisticas(jugadores, "bloqueos_totales", False)
+    lista_por_temporada = quick_sort_estadisticas(jugadores, "temporadas", False)
+    
+    imprimir_dato(f"los mejores por estadistica:\
+    \n mayor cantidad de puntos: {lista_por_puntos[0]['nombre']}({lista_por_puntos[0]['estadisticas']['puntos_totales']})\
+    \n mayor cantidad de rebotes: {lista_por_rebotes[0]['nombre']}({lista_por_rebotes[0]['estadisticas']['rebotes_totales']})\
+    \n mayor cantidad de asistencias: {lista_por_asistencias[0]['nombre']}({lista_por_asistencias[0]['estadisticas']['asistencias_totales']})\
+    \n mayor cantidad de robos: {lista_por_robos[0]['nombre']}({lista_por_robos[0]['estadisticas']['robos_totales']})\
+    \n moyor cantidad de bloqueos: {lista_por_bloqueo[0]['nombre']}({lista_por_bloqueo[0]['estadisticas']['bloqueos_totales']})\
+    \n mayor cantidad de temporadas: {lista_por_temporada[0]['nombre']}({lista_por_temporada[0]['estadisticas']['temporadas']})")
